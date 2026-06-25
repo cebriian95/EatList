@@ -1,0 +1,48 @@
+# Project files
+AGENTS.md
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.dsym
+*.nupkg
+*.vs/
+.vscode/
+build/
+[Bb]in/
+[Oo]bj/
+[Pp]ublish/
+*.DotSettings
+*.DotSettings.user
+
+# User Secrets
+secrets.json
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Angular
+/dist
+/tmp
+/out-tsc
+/.angular
+
+# IDE
+.idea/
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+appsettings.Development.json
