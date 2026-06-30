@@ -1,9 +1,10 @@
 namespace EatList.Api.Models;
+
 public enum SpotStatus
-    {
-        Pendiente,
-        Visitado,
-    }
+{
+    Pendiente,
+    Visitado,
+}
 
 public class Spot
 {

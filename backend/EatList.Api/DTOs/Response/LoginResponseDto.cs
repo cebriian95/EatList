@@ -1,6 +1,6 @@
 namespace EatList.Api.DTOs.Response;
 
-public class LoginResponse
+public class LoginResponseDto
 {
     public required string Token { get; set; }
     public required string RefreshToken { get; set; }
