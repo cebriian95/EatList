@@ -1,7 +1,6 @@
 using EatList.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using EatList.Api.DTOs.Request;
-using EatList.Api.DTOs.Response;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 

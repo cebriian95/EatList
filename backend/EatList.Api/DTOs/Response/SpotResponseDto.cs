@@ -10,5 +10,6 @@ public class SpotResponseDto
     public  string LocationMap { get; set; } = string.Empty;
     public SpotStatus Status { get; set; }
     public int BoardId { get; set; }
+    public List<RatingResponseDto> Ratings { get; set; } = [];
     public DateTime CreatedAt { get; set; }
 }

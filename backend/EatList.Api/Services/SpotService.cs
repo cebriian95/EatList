@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using EatList.Api.DTOs.Request;
 using EatList.Api.DTOs.Response;
-
 using EatList.Api.Data;
 using EatList.Api.Models;
 

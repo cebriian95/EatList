@@ -44,6 +44,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<IBoardService, BoardService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<ISpotService, SpotService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 
 
 var app = builder.Build();
