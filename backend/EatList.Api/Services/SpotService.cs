@@ -20,6 +20,7 @@ public class SpotService : ISpotService
         var spots = await _db.Spots
             .Where(s => s.BoardId == boardId)
             .OrderBy(s => s.CreatedAt)
+            .Include(s => s.Ratings)
             .ToListAsync();
 
         return spots.Select(MapToResponse).ToList();
@@ -33,7 +34,7 @@ public class SpotService : ISpotService
             Title = dto.Title,
             Location = dto.Location ?? string.Empty,
             LocationMap = dto.LocationMap ?? string.Empty,
-            Status = SpotStatus.Pendiente,
+            Status = dto.Status ?? SpotStatus.Pendiente,
             BoardId = boardId,
             CreatedAt = DateTime.Now
         };
@@ -82,7 +83,15 @@ public class SpotService : ISpotService
             LocationMap = spot.LocationMap,
             Status = spot.Status,
             BoardId = spot.BoardId,
-            CreatedAt = spot.CreatedAt
+            CreatedAt = spot.CreatedAt,
+            Ratings = spot.Ratings.Select(r => new RatingResponseDto
+            {
+                Id = r.Id,
+                SpotId = r.SpotId,
+                Nickname = r.Nickname,
+                Score = r.Score,
+                CreatedAt = r.CreatedAt
+            }).ToList()
         };
     }
 }
