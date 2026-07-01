@@ -26,13 +26,22 @@ public class SpotsController : ControllerBase
         return Ok(spots);
     }
 
+    [HttpGet("{spotId}")]
+    public async Task<IActionResult> GetSpot(Guid spotId)
+    {
+        var boardId = int.Parse(User.FindFirstValue("BoardId")!);
+        var spot = await _spotService.GetSpotByIdAsync(boardId, spotId);
+        return Ok(spot);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateSpot([FromBody] CreateSpotDto dto)
     {
         var boardId = int.Parse(User.FindFirstValue("BoardId")!);
         var spot = await _spotService.CreateSpotAsync(boardId, dto);
-        return CreatedAtAction(nameof(GetSpots), new { boardId = boardId }, spot);
+        return CreatedAtAction(nameof(GetSpot), new { spotId = spot.Id }, spot);
     }
+
 
     [HttpPut("{spotId}")]
     public async Task<IActionResult> UpdateSpot(Guid spotId, [FromBody] UpdateSpotDto dto)

@@ -53,19 +53,18 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseHttpsRedirection();
+
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-app.UseHttpsRedirection();
 
 using (var scope = app.Services.CreateScope())
 {

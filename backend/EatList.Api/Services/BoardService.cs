@@ -31,7 +31,7 @@ public class BoardService : IBoardService
         _db.Boards.Add(board);
         await _db.SaveChangesAsync();
 
-        return await GenerateLoginResponseAsync(board);
+        return await GenerateLoginResponseAsync(board, dto.Password);
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginDto dto)
@@ -94,7 +94,7 @@ public class BoardService : IBoardService
         await _db.SaveChangesAsync();
     }
 
-    private async Task<LoginResponseDto> GenerateLoginResponseAsync(Board board)
+    private async Task<LoginResponseDto> GenerateLoginResponseAsync(Board board, string? plainPassword = null)
     {
         var claims = new[] { new Claim("BoardId", board.Id.ToString()) };
         var token = _jwt.GenerateToken(claims);
@@ -121,9 +121,9 @@ public class BoardService : IBoardService
             {
                 Id = board.Id,
                 Name = board.Name,
-                Password = board.Password,
                 CreatedAt = board.CreatedAt
-            }
+            },
+            PlainPassword = plainPassword
         };
     }
 }

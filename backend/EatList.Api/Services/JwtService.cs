@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 

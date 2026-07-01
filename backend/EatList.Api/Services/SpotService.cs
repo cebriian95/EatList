@@ -26,6 +26,19 @@ public class SpotService : ISpotService
         return spots.Select(MapToResponse).ToList();
     }
 
+    public async Task<SpotResponseDto> GetSpotByIdAsync(int boardId, Guid spotId)
+    {
+        var spot = await _db.Spots
+            .Where(s => s.BoardId == boardId && s.Id == spotId)
+            .Include(s => s.Ratings)
+            .FirstOrDefaultAsync();
+
+        if (spot is null)
+            throw new KeyNotFoundException("Spot not found");
+
+        return MapToResponse(spot);
+    }
+
     public async Task<SpotResponseDto> CreateSpotAsync(int boardId, CreateSpotDto dto)
     {
         var spot = new Spot
