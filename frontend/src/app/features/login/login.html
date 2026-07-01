@@ -1,0 +1,137 @@
+<div class="bg-red-500 dark:bg-gray-900 flex flex-col justify-center items-center min-h-screen">
+    <!-- Dark mode toggle button -->
+    <button (click)="themeService.toggleTheme()"
+        class="absolute top-6 right-6 p-2 text-white dark:text-gray-300 rounded-lg transition-colors hover:bg-gray-700 dark:hover:bg-gray-600"
+        title="Toggle theme">
+        @if (themeService.isDarkMode()) {
+        <lucide-icon [img]="Sun" class="w-5 h-5" />
+        } @else {
+        <lucide-icon [img]="Moon" class="w-5 h-5" />
+        }
+    </button>
+
+    <!-- Header con título de la app -->
+    <div class="w-full flex justify-center mb-8 pt-6">
+        <h1 class="text-white dark:text-red-400 text-3xl font-bold">Spots Lunch</h1>
+    </div>
+
+    <div class="w-full max-w-4xl px-4 mx-auto">
+        <!-- Contenedor principal -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Salas recientes - Primero en móvil -->
+            <div class="lg:col-span-2 order-first lg:order-last">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h2 class="text-red-600 dark:text-white mb-4 text-xl font-semibold">Salas Recientes</h2>
+                    <div class="space-y-3">
+                        @for (board of recentBoards(); track board.id) {
+                        <form (submit)="onLoginWithBoard(board)">
+                            <div
+                                class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-semibold text-gray-800 dark:text-white">{{ board.name}}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">#{{ board.id }}</p>
+                                    </div>
+                                    <div
+                                        class="flex w-full sm:w-auto items-center justify-end gap-2 sm:gap-3 sm:shrink-0">
+                                        @if (isPendingBoard(board)) {
+                                        <input type="password" [(ngModel)]="newPassword"
+                                            name="newPassword-{{ board.id }}" placeholder="Nueva contraseña"
+                                            class="flex-1 min-w-0 w-full sm:w-52 max-w-none sm:max-w-xs px-3 py-2.5 border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-lg text-sm shadow-sm transition-colors focus:outline-none focus:border-red-600 dark:focus:border-red-400" />
+                                        <button type="button" (click)="cancelLoginWithNewPassword()"
+                                            class="p-2.5 bg-gray-500 hover:bg-gray-600 text-white rounded-full transition-colors shadow-sm"
+                                            title="Cancelar">
+                                            <lucide-icon [img]="XIcon" class="w-4 h-4" />
+                                        </button>
+                                        <button type="button" (click)="onLoginWithNewPassword(board)"
+                                            class="p-2.5 bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors shadow-sm"
+                                            title="Entrar con la nueva contraseña">
+                                            <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+                                        </button>
+                                        } @else {
+                                        <button type="submit"
+                                            class="p-2.5 bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors shadow-sm"
+                                            title="Entrar automáticamente">
+                                            <lucide-icon [img]="ArrowRight" class="w-4 h-4" />
+                                        </button>
+                                        }
+                                        <button type="button"
+                                            (click)="auth.deleteRecentBoard(board.id); recentBoards.set(auth.getRecentBoards())"
+                                            class="p-2.5 bg-gray-500 hover:bg-gray-600 text-white rounded-full transition-colors shadow-sm"
+                                            title="Eliminar sala">
+                                            <lucide-icon [img]="Trash2" class="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unirse/Crear sala - Vistas intercambiables -->
+            <div class="lg:col-span-2 order-2 lg:order-1">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <!-- Botones para cambiar de vista -->
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6">
+                        <button (click)="setView('login')"
+                            [class]="currentView === 'login' ? 'bg-red-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'"
+                            class="w-full sm:w-auto px-4 py-2 rounded-lg font-semibold transition-colors">
+                            Unirse a Sala
+                        </button>
+                        <button (click)="setView('create')"
+                            [class]="currentView === 'create' ? 'bg-green-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'"
+                            class="w-full sm:w-auto px-4 py-2 rounded-lg font-semibold transition-colors">
+                            Crear Sala
+                        </button>
+                    </div>
+
+                    <!-- Vista Unirse a Sala -->
+                    @if (currentView === 'login') {
+                    <h2 class="text-red-600 dark:text-white mb-4 text-xl font-semibold">Unirse a Sala</h2>
+                    <form (ngSubmit)="onLogin()">
+                        <div class="mb-4">
+                            <input type="text" [(ngModel)]="boardId" name="boardId" placeholder="Número de sala (ID)"
+                                required
+                                class="w-full px-3 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded text-base transition-colors focus:outline-none focus:border-red-600 dark:focus:border-red-400" />
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña"
+                                required
+                                class="w-full px-3 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded text-base transition-colors focus:outline-none focus:border-red-600 dark:focus:border-red-400" />
+                        </div>
+                        <button type="submit"
+                            class="w-full py-3 bg-red-600 hover:bg-red-700 text-white border-none rounded text-base font-bold cursor-pointer transition-colors">
+                            Entrar
+                        </button>
+                    </form>
+                    }
+
+                    <!-- Vista Crear Sala -->
+                    @if (currentView === 'create') {
+                    <h2 class="text-red-600 dark:text-white mb-4 text-xl font-semibold">Crear Sala</h2>
+                    <form (ngSubmit)="onCreateBoard()">
+                        <div class="mb-4">
+                            <input type="text" [(ngModel)]="createBoardName" name="createBoardName"
+                                placeholder="Nombre de la sala" required minlength="3" maxlength="20"
+                                class="w-full px-3 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded text-base transition-colors focus:outline-none focus:border-red-600 dark:focus:border-red-400" />
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" [(ngModel)]="createBoardPassword" name="createBoardPassword"
+                                placeholder="Contraseña" required minlength="3"
+                                class="w-full px-3 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded text-base transition-colors focus:outline-none focus:border-red-600 dark:focus:border-red-400" />
+                        </div>
+                        <button type="submit"
+                            class="w-full py-3 bg-green-600 hover:bg-green-700 text-white border-none rounded text-base font-bold cursor-pointer transition-colors">
+                            Crear Sala
+                        </button>
+                    </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-toast></app-toast>

@@ -1,0 +1,72 @@
+<div class="fixed inset-0 bg-red-600/70 dark:bg-gray-900/80 flex items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-96">
+        <h2 class="text-2xl font-bold text-red-600 dark:text-red-400 mb-6">
+            @if (spot) {
+                Editar SPot
+            }@else {
+                Añadir SPot
+            }
+        </h2>
+
+        <form class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300  mb-2">Restaurante*</label>
+                <input type="text" placeholder="Nombre del restaurante" name="title" [(ngModel)]="title" [class.border-red-600]="titleError"
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 dark:focus:ring-red-400" 
+                    maxlength="40"/>
+                @if(titleError) {
+                <p class="text-red-600 dark:text-red-400 text-sm">{{ titleError }}</p>
+                }
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300  mb-2">Ciudad*</label>
+                <input type="text" placeholder="Ciudad" name="location" [(ngModel)]="location" [class.border-red-600]="locationError"
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 dark:focus:ring-red-400"
+                    maxlength="40"/>
+                @if(locationError) {
+                <p class="text-red-600 dark:text-red-400 text-sm">{{ locationError }}</p>
+                }
+            </div>
+
+             <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300  mb-2">Ubicación</label>
+                <input type="text" placeholder="Link Google maps" name="location_map" [(ngModel)]="location_map" [class.border-red-600]="locationError"
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 dark:focus:ring-red-400"
+                    maxlength="100"/>
+                @if(location_mapError) {
+                <p class="text-red-600 dark:text-red-400 text-sm">{{ location_mapError }}</p>
+                }
+            </div>
+
+            <div class="flex items-center justify-between">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Marcar como visitado</label>
+                <button 
+                    type="button"
+                    (click)="isVisited = !isVisited"
+                    [class]="isVisited ? 'bg-red-600' : 'bg-gray-300 dark:bg-gray-600'"
+                    class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    <span 
+                        [class]="isVisited ? 'translate-x-6' : 'translate-x-1'"
+                        class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"></span>
+                </button>
+            </div>
+
+
+            <div class="flex gap-3 pt-4">
+                <button type="submit" (click)="createSpot()"
+                    class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg transition">
+                    @if (spot) {
+                        Editar
+                    }@else {
+                        Añadir
+                    }
+                </button>
+                <button type="button" (click)="cancel()"
+                    class="flex-1 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 font-semibold py-2 rounded-lg transition modal-cancel">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

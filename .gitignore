@@ -30,10 +30,11 @@ npm-debug.log
 yarn-error.log
 
 # Angular
-/dist
-/tmp
-/out-tsc
-/.angular
+dist/
+tmp/
+out-tsc/
+.angular/
+*.log
 
 # IDE
 .idea/
